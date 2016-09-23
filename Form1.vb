@@ -29,7 +29,7 @@ Public Class Form1
         Dim pd = New PrintDialog()
         Const PREFIX As String = "S"
         Const SN_LEN As Integer = 8
-        Const MAX_SERIAL_NUMBERS As Integer = 105
+        Const MAX_SERIAL_NUMBERS As Integer = 67
         Dim fmt As String
 
         fmt = New String("0", SN_LEN - 1)
@@ -84,20 +84,21 @@ Public Class MyPrintDoc
     Const MAX_PER_PAGE As Integer = 100
 
     Protected Overrides Sub OnPrintPage(e As PrintPageEventArgs)
-
         MyBase.OnPrintPage(e)
-        e.Graphics.DrawRectangle(Pens.Red,
-                                 New Rectangle(
-                                 e.PageBounds.X,
-                                 e.PageBounds.Y,
-                                 e.PageBounds.Width,
-                                 e.PageBounds.Height))
-        e.Graphics.DrawRectangle(Pens.Black,
-                                 New Rectangle(
-                                 e.MarginBounds.X,
-                                 e.MarginBounds.Y,
-                                 e.MarginBounds.Width,
-                                 e.MarginBounds.Height))
+        e.Graphics.DrawRectangle(
+            Pens.Red,
+            New Rectangle(
+                e.PageBounds.X,
+                e.PageBounds.Y,
+                e.PageBounds.Width,
+                e.PageBounds.Height))
+        e.Graphics.DrawRectangle(
+            Pens.Black,
+            New Rectangle(
+                e.MarginBounds.X,
+                e.MarginBounds.Y,
+                e.MarginBounds.Width,
+                e.MarginBounds.Height))
         Dim startIndex = (currentPage - 2) * MAX_PER_PAGE
         Const COLS As Integer = 4
         Const SN_WIDTH As Integer = 100
