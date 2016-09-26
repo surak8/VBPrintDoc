@@ -46,6 +46,10 @@ Public Class Form1
             mpd.Print()
         End If
     End Sub
+
+    Private Sub SnReportView1_Load(sender As Object, e As EventArgs) Handles SnReportView1.Load
+
+    End Sub
 #End Region
 
 End Class

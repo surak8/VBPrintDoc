@@ -73,14 +73,12 @@ Public Class MyPrintDoc
     End Sub
 #End Region
 
-    'Sub drawPageContent(e As PrintPageEventArgs)
     Sub drawPageContent(g As Graphics, r As Rectangle)
         Dim startIndex As Integer = (currentPage - 2) * MAX_PER_PAGE
 
         ' center this, larger bold font
         Using myFont As New Font(FONT_NAME, POINT_SIZE + 4, FontStyle.Bold)
             centerString(myFont, g, 60, "SERIAL NUMBERS SHEET", r)
-            '            g.DrawString("SERIAL NUMBERS SHEET", myFont, Brushes.Black, New PointF(100, 100))
         End Using
 
         Using p = New Pen(Color.Black, 2)
@@ -105,23 +103,22 @@ Public Class MyPrintDoc
             g.DrawString("LOT#", myFont, Brushes.Black, New PointF(440, 110))
         End Using
 
-        g.DrawString("AUTO", afont, Brushes.Black, New PointF(230, 200))
-        g.DrawString("BURST", afont, Brushes.Black, New PointF(350, 200))
-        g.DrawString("SEMI", afont, Brushes.Black, New PointF(460, 200))
+        Const yFireType As Integer = 180
+        g.DrawString("AUTO", afont, Brushes.Black, New PointF(250, yFireType))
+        g.DrawString("BURST", afont, Brushes.Black, New PointF(370, yFireType))
+        g.DrawString("SEMI", afont, Brushes.Black, New PointF(480, yFireType))
 
         Const S1 As String = "TOTAL PARTS IN THIS SERIAL NUMBER RANGE:"
         Dim sf = g.MeasureString(S1, afont)
-        Const YMSG As Integer = 900
+        Const YMSG As Integer = 1000
         g.DrawString(S1, afont, Brushes.Black, New PointF(60, YMSG))
         g.DrawString("THESE PARTS HAVE BEEN TRANSFERRED TO:", afont, Brushes.Black,
-                              New PointF(70, 840))
+                              New PointF(70, 1020))
 
         Dim sf2 = g.MeasureString(New String("M", 9), afont)
-        '//--        Const VOFFSET As Integer = 150
-        '//  --      Const HOFFSET As Integer = 20
+
         printSerialNumbersIn(g,
             New Rectangle(0, 0, 100, 100), Math.Ceiling(sf2.Height))
-        '       Return startIndex
     End Sub
     Shared Sub drawDecorations(g As Graphics, r As Rectangle, rpage As Rectangle)
         'Shared Sub drawDecorations(e As PrintPageEventArgs)
@@ -162,15 +159,15 @@ Public Class MyPrintDoc
     Sub printSerialNumbersIn(g As Graphics, r As Rectangle, h1 As Single)
         Dim row As Integer, col As Integer
 
-        Const HOFFSET As Integer = 40
         If showFrames Then g.DrawRectangle(Pens.Blue, r)
 
         Dim wmult As Integer, loffset As Integer
 
-
-        wmult = (r.Width \ COLS) - 8
-        Dim snFont As Font = New Font(FONT_NAME, POINT_SIZE, FontStyle.Bold)
-
+        wmult = (r.Width \ COLS) - 8 + 20
+        wmult = 250
+        Dim snFont As Font = New Font(FONT_NAME, POINT_SIZE + 4, FontStyle.Bold)
+        Const voffset As Integer = 220
+        Const hoffset As Integer = 50
 
         loffset = wmult \ 4 + r.Left
         For index As Integer = 1 To MAX_PER_PAGE
@@ -179,12 +176,14 @@ Public Class MyPrintDoc
             End If
             row = (index - 1) \ COLS
             col = (index - 1) - row * COLS
+            row = (index - 1) \ 25
+            If col > 0 Then col = 1000
             g.DrawString(
                 _sns((index + ((currentPage - 1) * MAX_PER_PAGE)) - 1),
                 snFont,
                 Brushes.Black,
-                loffset + col * wmult,
-                r.Top + row * h1)
+                hoffset + loffset + col * wmult,
+                voffset + r.Top + row * h1)
         Next
     End Sub
     Friend Sub addSerialNumbers(prefix As String, maxSN As Integer)
