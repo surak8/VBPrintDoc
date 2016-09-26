@@ -22,20 +22,22 @@ Public Class MyPrintDoc
     Dim currentPage As Integer
     Dim maxPage As Integer
     Dim _sns As List(Of String) = Nothing
-#End Region
+    Dim _partNum As String
+    Dim _lotNum As Integer
 
     ReadOnly f10 As Font = New Font(FONT_NAME, 10)
     ReadOnly f10b As Font = New Font(FONT_NAME, 10, FontStyle.Bold)
-    ReadOnly f18 As Font = New Font(FONT_NAME, 18, FontStyle.Bold)
-    ReadOnly f16 As Font = New Font(FONT_NAME, 16, FontStyle.Bold)
+    ReadOnly f12 As Font = New Font(FONT_NAME, 12, FontStyle.Bold)
     ReadOnly f14 As Font = New Font(FONT_NAME, 14)
     ReadOnly f14b As Font = New Font(FONT_NAME, 14, FontStyle.Bold)
-    ReadOnly f12 As Font = New Font(FONT_NAME, 12, FontStyle.Bold)
+    ReadOnly f16 As Font = New Font(FONT_NAME, 16, FontStyle.Bold)
+    ReadOnly f18 As Font = New Font(FONT_NAME, 18, FontStyle.Bold)
     ReadOnly f20 As Font = New Font(FONT_NAME, 20)
+    ReadOnly f20b As Font = New Font(FONT_NAME, 20, FontStyle.Bold Or FontStyle.Underline)
 
     Public ReadOnly f11 As Font = New Font(FONT_NAME_2, 11)
-    Dim _partNum As String
-    Dim _lotNum As Integer
+
+#End Region
 
 #Region "ctors"
     Sub New()
@@ -108,12 +110,11 @@ Public Class MyPrintDoc
         Dim startIndex As Integer = (currentPage - 2) * MAX_PER_PAGE
 
         Using br As New SolidBrush(Color.Black)
-            centerString(f16, g, 60, "SERIAL NUMBERS SHEET", r)
+            centerString(f20b, g, 40, "SERIAL NUMBERS SHEET", r)
             Using p = New Pen(br, 2)
                 g.DrawRectangle(p, New Rectangle(140, 100, 80, 40))
                 g.DrawRectangle(p, New Rectangle(310, 100, 100, 40))
                 g.DrawRectangle(p, New Rectangle(500, 100, 80, 40))
-                '          g.DrawRectangle(p, New Rectangle(670, 100, 110, 40))
                 g.DrawRectangle(p, New Rectangle(500, 860, 80, 40))
             End Using
             g.DrawString("MODEL", f10, br, New PointF(80, 110))
