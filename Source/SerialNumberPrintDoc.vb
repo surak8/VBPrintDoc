@@ -8,7 +8,7 @@ Public Class SerialNumberPrintDoc
     Const COLS As Integer = 4
     Const SN_WIDTH As Integer = 100
     Const SN_HEIGHT As Integer = 20
-    '    Const FONT_NAME As String = "Courier New"
+    Const NUM_ROWS = MAX_PER_PAGE \ COLS
     Const FONT_NAME As String = "Arial"
     Const FONT_NAME_2 As String = "Calibri"
 #End Region
@@ -50,8 +50,8 @@ Public Class SerialNumberPrintDoc
         End If
     End Sub
 #End Region
+
 #Region "properties"
-#End Region
     Public Property partNum() As String
         Get
             Return _partNum
@@ -68,6 +68,7 @@ Public Class SerialNumberPrintDoc
             _lotNum = value
         End Set
     End Property
+#End Region
 
 #Region "methods"
     Sub init()
@@ -89,9 +90,6 @@ Public Class SerialNumberPrintDoc
         If _sns.Count Mod MAX_PER_PAGE > 0 Then maxPage = maxPage + 1
     End Sub
     Protected Overrides Sub OnPrintPage(e As PrintPageEventArgs)
-        '        Dim row As Integer, col As Integer
-        '    Dim startIndex As Integer
-
         MyBase.OnPrintPage(e)
         If showGrid Then drawDecorations(e.Graphics, e.MarginBounds, e.PageBounds)
         If showContent Then drawPageContent(e.Graphics, e.MarginBounds, partNum, lotNum)
@@ -187,15 +185,14 @@ Public Class SerialNumberPrintDoc
     End Sub
 
     Sub printSerialNumbersIn(g As Graphics, r As Rectangle, br As Brush)
+        Const WINC = 50
+        Const HOFF = 100
         Const VOFFSET As Integer = 220
-        Const NUM_ROWS = MAX_PER_PAGE \ COLS
-        Dim row As Integer, col As Integer
-        Dim snWidth As Integer, snIndex As Integer, sn As String, snHeight As Integer, sf As SizeF
+        Dim row As Integer, col As Integer, snWidth As Integer, snIndex As Integer
+        Dim sn As String, snHeight As Integer, sf As SizeF
 
         If showFrames Then g.DrawRectangle(Pens.Blue, r)
 
-        Const WINC = 50
-        Const HOFF = 100
         For index As Integer = 1 To MAX_PER_PAGE
             snIndex = (index + ((currentPage - 1) * MAX_PER_PAGE)) - 1
             sn = _sns(snIndex)
@@ -203,26 +200,29 @@ Public Class SerialNumberPrintDoc
                 sf = g.MeasureString(sn, f12)
                 snWidth = Convert.ToInt32(Math.Ceiling(sf.Width)) + WINC
                 snHeight = Convert.ToInt32(Math.Ceiling(sf.Height)) + 2
-                '                snHeight = Convert.ToInt32(Math.Floor(sf.Height))
             End If
 
             If index + ((currentPage - 1) * MAX_PER_PAGE) > _sns.Count Then
                 Continue For
             End If
-            row = (index - 1) Mod NUM_ROWS
-            col = (index - 1) \ NUM_ROWS
-
-            '         col = (index - 1) Mod COLS
-            '        row = (index - 1) \ COLS
-
+            calculateCoordinates(index, row, col)
             g.DrawString(sn, f16, br,
                 r.Left + col * snWidth + HOFF,
                 VOFFSET + r.Top + row * snHeight)
         Next
     End Sub
 
+    Sub calculateCoordinates(index As Integer, ByRef row As Integer, ByRef col As Integer)
+#If True Then
+        row = (index - 1) Mod NUM_ROWS
+        col = (index - 1) \ NUM_ROWS
+#Else
+        col = (index - 1) Mod COLS
+        row = (index - 1) \ COLS
+#End If
+    End Sub
+
     Friend Sub addSerialNumbers(prefix As String, maxSN As Integer, snLen As Integer)
-        '        Const SN_LEN As Integer = 8
         Dim fmt As String
 
         Logger.log(MethodBase.GetCurrentMethod())
