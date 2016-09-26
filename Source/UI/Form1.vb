@@ -25,13 +25,22 @@ Public Class Form1
     Sub tsmiTest_Click(sender As Object, e As EventArgs) Handles tsmiTest.Click
         Dim mpd As MyPrintDoc = New MyPrintDoc()
         Dim pd = New PrintDialog()
+#If True Then
+        Const PREFIX = "IARE00"
+        Const SN_LEN As Integer = 10
+
+#Else
         Const PREFIX As String = "S"
         Const SN_LEN As Integer = 8
+#End If
         Const MAX_SERIAL_NUMBERS As Integer = 100
+        Const KEY = "Previous Printer"
         Dim fmt As String
 
         Logger.log(MethodBase.GetCurrentMethod())
-        fmt = New String("0", SN_LEN - 1)
+        mpd.partNum = "400003"
+        mpd.lotNum = 29
+        fmt = New String("0", SN_LEN - PREFIX.Length)
         For I As Integer = 0 To MAX_SERIAL_NUMBERS - 1
             mpd.addSerialNumber(PREFIX + I.ToString(fmt))
         Next
@@ -41,10 +50,16 @@ Public Class Form1
         pd.AllowSomePages = False
         pd.Document = mpd
         Dim printerName As String = "Foxit PhantomPDF Printer"
+        Dim tmp As String
+
+        tmp = CType(Application.UserAppDataRegistry.GetValue(KEY, printerName), String)
+        If Not String.IsNullOrEmpty(tmp) Then printerName = tmp
         pd.PrinterSettings.PrinterName = printerName
         If pd.ShowDialog() <> DialogResult.Cancel Then
             mpd.Print()
+            Application.UserAppDataRegistry.SetValue(KEY, pd.PrinterSettings.PrinterName)
         End If
+        '        End If
     End Sub
 
     Private Sub SnReportView1_Load(sender As Object, e As EventArgs) Handles SnReportView1.Load
