@@ -94,7 +94,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Source\MyPrintDoc.vb">
+    <Compile Include="Source\SerialNumberPrintDoc.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Source\UI\SNReportView.vb">

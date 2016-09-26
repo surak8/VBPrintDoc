@@ -1,7 +1,7 @@
 Imports System.Drawing.Printing
 Imports System.Reflection
 
-Public Class MyPrintDoc
+Public Class SerialNumberPrintDoc
     Inherits PrintDocument
 #Region "constants"
     Const MAX_PER_PAGE As Integer = 100

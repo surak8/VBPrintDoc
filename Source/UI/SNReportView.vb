@@ -5,7 +5,7 @@ Public Class SNReportView
         InitializeComponent()
     End Sub
 
-    Dim mpd As MyPrintDoc
+    Dim mpd As SerialNumberPrintDoc
 
     Sub InitializeComponent()
         ''      Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -13,7 +13,7 @@ Public Class SNReportView
     End Sub
     Protected Overrides Sub OnCreateControl()
         MyBase.OnCreateControl()
-        mpd = New MyPrintDoc()
+        mpd = New SerialNumberPrintDoc()
         '        mpd.addSerialNumbers("RIK", 100)
         mpd.addSerialNumbers("IARE00", 100, 10)
         Me.partNumber = "400003"

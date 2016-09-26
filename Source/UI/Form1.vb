@@ -23,7 +23,7 @@ Public Class Form1
 
     End Sub
     Sub tsmiTest_Click(sender As Object, e As EventArgs) Handles tsmiTest.Click
-        Dim mpd As MyPrintDoc = New MyPrintDoc()
+        Dim mpd As SerialNumberPrintDoc = New SerialNumberPrintDoc()
         Dim pd = New PrintDialog()
 #If True Then
         Const PREFIX = "IARE00"
